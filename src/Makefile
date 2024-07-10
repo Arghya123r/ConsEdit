@@ -1,2 +1,2 @@
-kilo:kilo.c
-	$(CC) kilo.c -o -kilo -Wall -Wextra -pedantic -std=c99
+Consedit:Consedit.c
+	$(CC) Consedit.c -o Consedit -Wall -Wextra -pedantic -std=c99
