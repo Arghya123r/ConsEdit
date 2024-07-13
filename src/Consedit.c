@@ -24,6 +24,24 @@ void die (const char* s){
     exit(1);
 }
 
+void editorProcessKeypress(){
+    char c = editorReadkey();
+
+    switch (c)
+    {
+    case CTRL_KEY('q'):
+        write(STDOUT_FILENO,"\x1b[2J",4);
+        write(STDOUT_FILENO,"xib[h",3);
+        exit(0);
+        break;
+    }
+}
+
+void editorrefreshscreen(){
+    write(STDOUT_FILENO,"\x1b[2J",4);
+    write(STDOUT_FILENO,"xib[h",3);
+}
+
 void disableRawmode(){
     if(tcsetattr(STDIN_FILENO,TCSAFLUSH, &orig_termios)==-1)
         die("tcsetatte");
@@ -52,16 +70,8 @@ int main()
     enableRawmode();
 
     while(1){
-
-        char c = '\0';
-        if(read(STDIN_FILENO,&c,1)==-1 && errno != EAGAIN) die("Read");
-        if(iscntrl(c)){
-            printf("%d\r\n",c);
-        }
-        else{
-            printf("%d ('%c')\r\n",c,c);
-        }
-        if(c==CTRL_KEY('q')) break;
+        editorrefreshscreen();
+        editorProcessKeypress();
     }
     return 0;
 }
